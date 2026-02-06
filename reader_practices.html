@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Читательские практики</title>
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --bg-color: #fdfbf7;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --accent: #607d8b;
+            --accent-hover: #455a64;
+            --border: #dfe6e9;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+            --success-color: #27ae60;
+            --success-bg: #f0fdf4;
+            --success-border: #86efac;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .main-nav a.active {
+            background-color: var(--accent);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .main-nav a:hover:not(.active) {
+            background-color: white;
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 10px;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        /* Forms & Inputs */
+        textarea, input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 15px;
+            outline: none;
+            background-color: #fafafa;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--accent);
+            background-color: #fff;
+        }
+        
+        textarea {
+            min-height: 150px;
+        }
+
+        button {
+            background-color: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        button:disabled {
+            background-color: #f5f5f5;
+            color: #b2bec3;
+            cursor: not-allowed;
+        }
+
+        /* Result Actions (Save buttons etc) */
+        .result-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 15px;
+            gap: 10px;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .btn-save {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+            border-color: var(--success-border);
+        }
+
+        .btn-save:hover:not(:disabled) {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        /* New Reader Practices Specifics */
+        .collector-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .collector-item label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        .collector-item input {
+            margin-bottom: 0;
+        }
+
+        .author-prompt {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ffe082;
+            color: #5d4037;
+            margin-bottom: 20px;
+        }
+
+        .dream-list {
+            margin: 0 0 15px 0;
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .dream-list li { margin-bottom: 4px; }
+
+        .practice-active-area {
+            display: none; /* Hidden by default */
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .practice-active-area.active {
+            display: block;
+        }
+
+        .random-subject {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f1f2f6;
+            border-radius: 8px;
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #b2bec3;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+            h1 { font-size: 1.5rem; }
+            .result-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav class="main-nav">
+        <a href="index.html">Писательские практики</a>
+        <a href="reader_practices.html" class="active">Читательские практики</a>
+    </nav>
+
+    <header>
+        <h1>Читательские практики</h1>
+        <div class="subtitle">Упражнения, которые развивают «живость» текста</div>
+    </header>
+
+    <!-- Практика 1 -->
+    <div class="card">
+        <h3>Практика 1. Собиратель чувств</h3>
+        <p class="description">Записывай каждый день по одному наблюдению. Через 30 дней у тебя будет база для живых сцен.</p>
+        
+        <div class="collector-grid">
+            <div class="collector-item">
+                <label>Запах</label>
+                <input type="text" id="col-smell" placeholder="Например: запах мокрого асфальта...">
+            </div>
+            <div class="collector-item">
+                <label>Звук</label>
+                <input type="text" id="col-sound" placeholder="Например: гул холодильника в тишине...">
+            </div>
+            <div class="collector-item">
+                <label>Текстура</label>
+                <input type="text" id="col-texture" placeholder="Например: шершавая кирпичная стена...">
+            </div>
+            <div class="collector-item">
+                <label>Цвет</label>
+                <input type="text" id="col-color" placeholder="Например: грязно-жёлтый свет фонаря...">
+            </div>
+            <div class="collector-item">
+                <label>Эмоция</label>
+                <input type="text" id="col-emotion" placeholder="Например: внезапная лёгкая тревога...">
+            </div>
+        </div>
+
+        <div class="result-actions">
+            <button onclick="saveCollector()" class="btn-save">Сохранить наблюдения</button>
+        </div>
+    </div>
+
+    <!-- Практика 2 -->
+    <div class="card">
+        <h3>Практика 2. Переписывание</h3>
+        <p class="description">Выбери абзац любимого автора (Брэдбери, Ле Гуин, Гуляковский). Перепиши его своими словами, сохранив ритм, но изменив образность. Так ты тренируешь свой стиль.</p>
+        
+        <div class="author-prompt">
+            <strong>Задание:</strong> Найди абзац. Прочитай его вслух. Почувствуй ритм. Напиши свой текст поверх этой структуры.
+        </div>
+        
+        <textarea id="rewrite-text" placeholder="Пиши свой вариант здесь..." style="min-height: 200px;"></textarea>
+
+        <div class="result-actions">
+            <button onclick="saveRewrite()" class="btn-save">Сохранить переписывание</button>
+        </div>
+    </div>
+
+    <!-- Практика 3 -->
+    <div class="card">
+        <h3>Практика 3. Оживи предмет</h3>
+        <p class="description">Запиши 5 предложений об обычном предмете так, как будто он живой. Тренируй врождённую способность к анимизму.</p>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button onclick="generateAliveObject()">Дать предмет для оживления</button>
+        </div>
+
+        <div id="alive-area" class="practice-active-area">
+            <div id="alive-display" class="random-subject"></div>
+            <textarea id="alive-text" placeholder="Как этот предмет дышит? О чём молчит? Чего ждёт? (5 предложений)" style="min-height: 150px;"></textarea>
+            
+            <div class="result-actions">
+                <button onclick="saveAliveObject()" class="btn-save">Сохранить этюд</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Практика 4 -->
+    <div class="card">
+        <h3>Практика 4. Сон как сцена</h3>
+        <p class="description">Опиши свой сон, фокусируясь на его сценарной структуре.</p>
+        
+        <ul class="dream-list">
+            <li>Локация (где это происходило)</li>
+            <li>Событие (что случилось)</li>
+            <li>Эмоциональная тень (фоновое чувство)</li>
+            <li>Мифологическая часть (необъяснимое)</li>
+            <li>Основной мотив (страх, вина, ожидание...)</li>
+        </ul>
+
+        <textarea id="dream-text" placeholder="Опиши сон здесь..." style="min-height: 200px;"></textarea>
+
+        <div class="result-actions">
+            <button onclick="saveDream()" class="btn-save">Сохранить сон</button>
+        </div>
+    </div>
+
+    <footer>
+        Совет: выбери одну практику в день или чередуй их, чтобы не выгорать.
+    </footer>
+</div>
+
+<script>
+    /* --- DATA --- */
+    const aliveObjectsList = [
+        "Настольная лампа", "Старый медный котёл", "Пуговица на пальто", "Входная дверь", 
+        "Скрипучий стул", "Фарфоровая чашка", "Зеркало в прихожей", "Оконная рама", 
+        "Книжный шкаф", "Настенные часы", "Забытый зонт", "Чайник на плите", 
+        "Подушка", "Связка ключей", "Батарея отопления"
+    ];
+
+    /* --- STATE --- */
+    let lastAliveIndex = -1;
+
+    /* --- UTILS --- */
+    function downloadTextFile(filename, content) {
+        const element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
+    function sanitizeFilename(str) {
+        return str.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, '_');
+    }
+
+    function getFormattedDate() {
+        return new Date().toLocaleDateString('ru-RU').replace(/\./g, '-');
+    }
+
+    /* --- READER PRACTICE 1: COLLECTOR --- */
+    function saveCollector() {
+        const smell = document.getElementById('col-smell').value;
+        const sound = document.getElementById('col-sound').value;
+        const texture = document.getElementById('col-texture').value;
+        const color = document.getElementById('col-color').value;
+        const emotion = document.getElementById('col-emotion').value;
+
+        if (!smell && !sound && !texture && !color && !emotion) {
+            return alert('Заполните хотя бы одно поле');
+        }
+
+        const content = `Собиратель чувств (${getFormattedDate()})\n\n` +
+                        `Запах: ${smell}\n` +
+                        `Звук: ${sound}\n` +
+                        `Текстура: ${texture}\n` +
+                        `Цвет: ${color}\n` +
+                        `Эмоция: ${emotion}\n`;
+        
+        downloadTextFile(`senses_collection_${getFormattedDate()}.txt`, content);
+    }
+
+    /* --- READER PRACTICE 2: REWRITE --- */
+    function saveRewrite() {
+        const text = document.getElementById('rewrite-text').value;
+        if (!text) return alert('Поле пустое');
+        
+        const content = `Переписывание абзаца (${getFormattedDate()})\n\n${text}`;
+        downloadTextFile(`rewrite_${getFormattedDate()}.txt`, content);
+    }
+
+    /* --- READER PRACTICE 3: ALIVE OBJECT --- */
+    function generateAliveObject() {
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * aliveObjectsList.length);
+        } while (newIndex === lastAliveIndex && aliveObjectsList.length > 1);
+
+        lastAliveIndex = newIndex;
+
+        const display = document.getElementById('alive-display');
+        const area = document.getElementById('alive-area');
+        const textarea = document.getElementById('alive-text');
+
+        display.textContent = aliveObjectsList[newIndex];
+        area.classList.add('active');
+        textarea.value = '';
+    }
+
+    function saveAliveObject() {
+        const objName = document.getElementById('alive-display').textContent;
+        const text = document.getElementById('alive-text').value;
+
+        if (!objName) return alert('Сначала выберите предмет');
+        
+        const content = `Оживи предмет: ${objName}\n\n${text}`;
+        const safeName = sanitizeFilename(objName);
+        downloadTextFile(`${safeName}_alive.txt`, content);
+    }
+
+    /* --- READER PRACTICE 4: DREAM --- */
+    function saveDream() {
+        const text = document.getElementById('dream-text').value;
+        if (!text) return alert('Поле пустое');
+
+        const content = `Описание сна (${getFormattedDate()})\n\n${text}`;
+        downloadTextFile(`dream_scene_${getFormattedDate()}.txt`, content);
+    }
+</script>
+</body>
+</html>

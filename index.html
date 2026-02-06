@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ежедневные практики для писателя</title>
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --bg-color: #fdfbf7;
+            --card-bg: #ffffff;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --accent: #607d8b;
+            --accent-hover: #455a64;
+            --border: #dfe6e9;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+            --success-color: #27ae60;
+            --success-bg: #f0fdf4;
+            --success-border: #86efac;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .nav-btn.active {
+            background-color: var(--accent);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover:not(.active) {
+            background-color: white;
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+
+        /* Views */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        .view-section.active {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 10px;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin: 0 0 10px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        /* Forms & Inputs */
+        textarea, input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 15px;
+            outline: none;
+            background-color: #fafafa;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--accent);
+            background-color: #fff;
+        }
+        
+        textarea {
+            min-height: 150px;
+        }
+
+        button {
+            background-color: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        button:disabled {
+            background-color: #f5f5f5;
+            color: #b2bec3;
+            cursor: not-allowed;
+        }
+
+        /* Result Actions (Save buttons etc) */
+        .result-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 15px;
+            gap: 10px;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .stat-text {
+            margin-right: auto;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .btn-save {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+            border-color: var(--success-border);
+        }
+
+        .btn-save:hover:not(:disabled) {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        /* Practice 1: Timer Specifics */
+        .timer-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        #timer-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: var(--accent);
+        }
+
+        #timer-message {
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 10px;
+            min-height: 1.6em;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        #timer-message.visible {
+            opacity: 1;
+        }
+
+        /* Practice 2: Senses Specifics */
+        .practice-active-area {
+            display: none; /* Hidden by default */
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .practice-active-area.active {
+            display: block;
+        }
+
+        .random-subject {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f1f2f6;
+            border-radius: 8px;
+            color: var(--text-primary);
+        }
+
+        .sense-group {
+            margin-bottom: 15px;
+        }
+
+        .sense-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sense-group textarea {
+            min-height: 80px;
+            margin-bottom: 0;
+        }
+
+        /* Reader Practices Specifics */
+        .collector-grid {
+            display: grid;
+            gap: 15px;
+        }
+        .collector-item label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        .collector-item input {
+            margin-bottom: 0;
+        }
+
+        .author-prompt {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ffe082;
+            color: #5d4037;
+            margin-bottom: 20px;
+        }
+
+        .dream-list {
+            margin: 0 0 15px 0;
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .dream-list li { margin-bottom: 4px; }
+
+        /* Practice 3: Tech Specifics */
+        .tech-prompt {
+            font-size: 1.05rem;
+            font-style: italic;
+            background: #eef1f3;
+            padding: 20px;
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: -10px;
+            font-style: italic;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #b2bec3;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+            h1 { font-size: 1.5rem; }
+            .timer-container {
+                flex-direction: column-reverse;
+                gap: 15px;
+            }
+            .result-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .stat-text {
+                margin-right: 0;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <nav class="main-nav">
+        <button id="nav-writer" class="nav-btn active" onclick="switchTab('writer')">Писательские практики</button>
+        <button id="nav-reader" class="nav-btn" onclick="switchTab('reader')">Читательские практики</button>
+    </nav>
+    
+    <!-- WRITER SECTION -->
+    <div id="view-writer" class="view-section active">
+        <header>
+            <h1>Ежедневные практики для писателя</h1>
+            <div class="subtitle">Тренируй наблюдательность, ощущение мира и телесность технологий</div>
+        </header>
+
+        <div class="card">
+            <h3>Практика 1. Утренние страницы</h3>
+            <p class="description">15 минут свободного письма сразу после пробуждения. Не думай о сюжете или грамматике. Просто пиши всё, что приходит в голову.</p>
+            
+            <div class="timer-container">
+                <button id="btn-start-timer" onclick="startMorningPages()">Запустить 15‑минутный таймер</button>
+                <div id="timer-display">15:00</div>
+            </div>
+            
+            <textarea id="p1-text" placeholder="Начни писать здесь..." spellcheck="false"></textarea>
+            <div id="timer-message">Время вышло. Можешь остановиться или дописать мысль до конца.</div>
+            
+            <div id="p1-result" class="result-actions" style="display: none;">
+                <span id="p1-stats" class="stat-text"></span>
+                <button onclick="saveMorningPages()" class="btn-save">Сохранить в файл</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Практика 2. Пять чувств предмета</h3>
+            <p class="description">Тренировка сенсорного воображения. Сгенерируй случайный предмет и опиши его через пять каналов восприятия.</p>
+            
+            <div style="text-align: center;">
+                <button onclick="generateObject()">Выбрать случайный предмет</button>
+            </div>
+
+            <div id="senses-area" class="practice-active-area">
+                <div id="object-display" class="random-subject"></div>
+                
+                <div class="sense-group">
+                    <label class="sense-label">Зрение (форма, цвет, свет)</label>
+                    <textarea data-sense="Зрение" placeholder="Что я вижу..."></textarea>
+                </div>
+                <div class="sense-group">
+                    <label class="sense-label">Слух (звук при касании, падении)</label>
+                    <textarea data-sense="Слух" placeholder="Что я слышу..."></textarea>
+                </div>
+                <div class="sense-group">
+                    <label class="sense-label">Запах (материал, пыль, старость)</label>
+                    <textarea data-sense="Запах" placeholder="Какой запах..."></textarea>
+                </div>
+                <div class="sense-group">
+                    <label class="sense-label">Вкус (если применимо, или вкус воздуха рядом)</label>
+                    <textarea data-sense="Вкус" placeholder="Какой вкус..."></textarea>
+                </div>
+                <div class="sense-group">
+                    <label class="sense-label">Осязание (текстура, температура, вес)</label>
+                    <textarea data-sense="Осязание" placeholder="Ощущения кожи..."></textarea>
+                </div>
+
+                <div class="result-actions">
+                    <button onclick="resetSenses()" style="background-color: #fff; border-color: var(--border); color: var(--text-secondary);">Сбросить</button>
+                    <button onclick="saveSenses()" class="btn-save">Сохранить (.txt)</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Практика 3. Тело и технологии</h3>
+            <p class="description">Еженедельная практика. Опиши фрагмент мира, где технологии воспринимаются физически: через дискомфорт, удовольствие, звук или тактильность.</p>
+            
+            <div style="text-align: center;">
+                <button onclick="generateTechTheme()">Сгенерировать тему недели</button>
+            </div>
+
+            <div id="tech-area" class="practice-active-area">
+                <div id="tech-display" class="tech-prompt"></div>
+                <textarea id="p3-text" placeholder="Опиши свои телесные ощущения в этой ситуации..." style="min-height: 200px;"></textarea>
+                <div class="hint">Совет: Старайся описывать телесные ощущения, а не только внешний вид.</div>
+                
+                <div class="result-actions">
+                    <button onclick="saveTech()" class="btn-save">Сохранить (.txt)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- READER SECTION -->
+    <div id="view-reader" class="view-section">
+        <header>
+            <h1>Читательские практики</h1>
+            <div class="subtitle">Упражнения, которые развивают «живость» текста</div>
+        </header>
+
+        <div class="card">
+            <h3>Практика 1. Собиратель чувств</h3>
+            <p class="description">Записывай каждый день по одному наблюдению. Через 30 дней у тебя будет база для живых сцен.</p>
+            
+            <div class="collector-grid">
+                <div class="collector-item">
+                    <label>Запах</label>
+                    <input type="text" id="col-smell" placeholder="Например: запах мокрого асфальта...">
+                </div>
+                <div class="collector-item">
+                    <label>Звук</label>
+                    <input type="text" id="col-sound" placeholder="Например: гул холодильника в тишине...">
+                </div>
+                <div class="collector-item">
+                    <label>Текстура</label>
+                    <input type="text" id="col-texture" placeholder="Например: шершавая кирпичная стена...">
+                </div>
+                <div class="collector-item">
+                    <label>Цвет</label>
+                    <input type="text" id="col-color" placeholder="Например: грязно-жёлтый свет фонаря...">
+                </div>
+                <div class="collector-item">
+                    <label>Эмоция</label>
+                    <input type="text" id="col-emotion" placeholder="Например: внезапная лёгкая тревога...">
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button onclick="saveCollector()" class="btn-save">Сохранить наблюдения</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Практика 2. Переписывание</h3>
+            <p class="description">Выбери абзац любимого автора (Брэдбери, Ле Гуин, Гуляковский). Перепиши его своими словами, сохранив ритм, но изменив образность. Так ты тренируешь свой стиль.</p>
+            
+            <div class="author-prompt">
+                <strong>Задание:</strong> Найди абзац. Прочитай его вслух. Почувствуй ритм. Напиши свой текст поверх этой структуры.
+            </div>
+            
+            <textarea id="rewrite-text" placeholder="Пиши свой вариант здесь..." style="min-height: 200px;"></textarea>
+
+            <div class="result-actions">
+                <button onclick="saveRewrite()" class="btn-save">Сохранить переписывание</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Практика 3. Оживи предмет</h3>
+            <p class="description">Запиши 5 предложений об обычном предмете так, как будто он живой. Тренируй врождённую способность к анимизму.</p>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button onclick="generateAliveObject()">Дать предмет для оживления</button>
+            </div>
+
+            <div id="alive-area" class="practice-active-area">
+                <div id="alive-display" class="random-subject"></div>
+                <textarea id="alive-text" placeholder="Как этот предмет дышит? О чём молчит? Чего ждёт? (5 предложений)" style="min-height: 150px;"></textarea>
+                
+                <div class="result-actions">
+                    <button onclick="saveAliveObject()" class="btn-save">Сохранить этюд</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Практика 4. Сон как сцена</h3>
+            <p class="description">Опиши свой сон, фокусируясь на его сценарной структуре.</p>
+            
+            <ul class="dream-list">
+                <li>Локация (где это происходило)</li>
+                <li>Событие (что случилось)</li>
+                <li>Эмоциональная тень (фоновое чувство)</li>
+                <li>Мифологическая часть (необъяснимое)</li>
+                <li>Основной мотив (страх, вина, ожидание...)</li>
+            </ul>
+
+            <textarea id="dream-text" placeholder="Опиши сон здесь..." style="min-height: 200px;"></textarea>
+
+            <div class="result-actions">
+                <button onclick="saveDream()" class="btn-save">Сохранить сон</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Совет: выбери одну практику в день или чередуй их, чтобы не выгорать.
+    </footer>
+</div>
+
+<script>
+    /* --- DATA --- */
+    const objectsList = [
+        "Старая связка ключей", "Горячая керамическая кружка", "Спелое яблоко", "Шерстяной свитер", 
+        "Паспорт в обложке", "Метропоезд", "Засохший лист дерева", "Тяжёлая монета", "Кожаный ремень", 
+        "Свежая газета", "Зажжённая свеча", "Наручные часы", "Пластмассовая расчёска", "Холодная дверная ручка", 
+        "Кусок мела", "Ржавый гвоздь", "Мягкая игрушка", "Банковская карта", "Стеклянная бутылка", 
+        "Горсть песка", "Апельсин", "Компьютерная мышь", "Старая книга", "Чайная ложка", 
+        "Пустая картонная коробка", "Теннисный мяч", "Очки в оправе", "Наушники", "Кубик льда", "Зубная щётка"
+    ];
+
+    const techScenarios = [
+        "Ты стоишь в серверной комнате: сухой воздух, гул вентиляторов, мигание диодов...",
+        "Ты надеваешь тяжелый VR-шлем: давление на переносицу, запах поролона и нагретого пластика...",
+        "Ты едешь в беспилотном такси: странная плавность хода и отсутствие водителя вызывают легкую тошноту...",
+        "Твой бионический протез руки перегрелся на солнце, и ты чувствуешь тепло металла стыком кожи...",
+        "Ты проходишь через рамку металлоискателя: звук сканера и ощущение невидимых волн...",
+        "Ты лежишь внутри МРТ-аппарата: тесное пространство и громкий ритмичный стук магнитов...",
+        "Умный дом отключил отопление из-за сбоя: тишина и медленно наползающий холод...",
+        "Ты используешь интерфейс управления жестами: руки устали висеть в воздухе, пальцы немеют...",
+        "Дрон завис прямо над твоей головой: поток воздуха треплет волосы, звук режет уши...",
+        "Ты вживил чип-ключ под кожу: место прокола зудит, и ты чувствуешь инородное тело...",
+        "Городские камеры следят за тобой: ты физически ощущаешь «взгляд» объективов на затылке...",
+        "Ты печатаешь на голографической клавиатуре: отсутствие тактильной отдачи сбивает с толку подушечки пальцев...",
+        "Ты носишь экзоскелет грузчика: он берет вес на себя, но ремни натирают плечи...",
+        "Твой смартфон вибрирует в кармане, но ты не можешь его достать: фантомное жужжание на бедре...",
+        "Ты в комнате абсолютной звукоизоляции (безэховой камере): ты слышишь, как кровь шумит в ушах...",
+        "Ты чинишь старого робота: запах горелого масла и смазки, холодный металл корпуса...",
+        "Ты надел наушники с активным шумоподавлением: мир исчез, возникло давление вакуума в ушах...",
+        "Ты трогаешь экран банкомата на морозе: стекло ледяное, пальцы не слушаются...",
+        "Ты стоишь рядом с высоковольтной линией: волосы на руках электризуются, воздух пахнет озоном...",
+        "3D-принтер печатает деталь рядом с тобой: монотонное жужжание и сладковатый запах плавленого пластика..."
+    ];
+
+    const aliveObjectsList = [
+        "Настольная лампа", "Старый медный котёл", "Пуговица на пальто", "Входная дверь", 
+        "Скрипучий стул", "Фарфоровая чашка", "Зеркало в прихожей", "Оконная рама", 
+        "Книжный шкаф", "Настенные часы", "Забытый зонт", "Чайник на плите", 
+        "Подушка", "Связка ключей", "Батарея отопления"
+    ];
+
+    /* --- STATE --- */
+    let lastObjectIndex = -1;
+    let lastTechIndex = -1;
+    let lastAliveIndex = -1;
+    let timerInterval = null;
+    let timerSeconds = 900; // 15 mins (900s)
+
+    /* --- NAVIGATION --- */
+    function switchTab(tab) {
+        // Toggle Buttons
+        document.getElementById('nav-writer').classList.toggle('active', tab === 'writer');
+        document.getElementById('nav-reader').classList.toggle('active', tab === 'reader');
+        
+        // Toggle Views
+        document.getElementById('view-writer').classList.toggle('active', tab === 'writer');
+        document.getElementById('view-reader').classList.toggle('active', tab === 'reader');
+    }
+
+    /* --- UTILS --- */
+    function downloadTextFile(filename, content) {
+        const element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
+    function sanitizeFilename(str) {
+        // Replace non-alphanumeric (allowing cyrillic) with underscores
+        return str.replace(/[^a-zA-Z0-9а-яА-ЯёЁ]/g, '_');
+    }
+
+    function getFormattedDate() {
+        return new Date().toLocaleDateString('ru-RU').replace(/\./g, '-');
+    }
+
+    /* --- WRITER PRACTICE 1: MORNING PAGES --- */
+    function startMorningPages() {
+        const btn = document.getElementById('btn-start-timer');
+        const message = document.getElementById('timer-message');
+        const resultDiv = document.getElementById('p1-result');
+
+        if (timerInterval) return; // Already running
+
+        btn.disabled = true;
+        btn.textContent = "Таймер запущен...";
+        message.classList.remove('visible');
+        resultDiv.style.display = 'none'; // Hide previous results
+        
+        updateTimerDisplay();
+
+        timerInterval = setInterval(() => {
+            timerSeconds--;
+            updateTimerDisplay();
+
+            if (timerSeconds <= 0) {
+                finishTimer();
+            }
+        }, 1000);
+    }
+
+    function finishTimer() {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        
+        const btn = document.getElementById('btn-start-timer');
+        const message = document.getElementById('timer-message');
+        const resultDiv = document.getElementById('p1-result');
+        const stats = document.getElementById('p1-stats');
+        const textarea = document.getElementById('p1-text');
+
+        message.classList.add('visible');
+        btn.textContent = "Таймер завершен";
+        
+        // Show report and save button
+        const charCount = textarea.value.length;
+        stats.textContent = `Написано символов: ${charCount}`;
+        resultDiv.style.display = 'flex';
+    }
+
+    function updateTimerDisplay() {
+        const display = document.getElementById('timer-display');
+        const m = Math.floor(timerSeconds / 60);
+        const s = timerSeconds % 60;
+        display.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function saveMorningPages() {
+        const text = document.getElementById('p1-text').value;
+        const filename = `morning_pages_${getFormattedDate()}.txt`;
+        downloadTextFile(filename, text);
+    }
+
+    /* --- WRITER PRACTICE 2: SENSES --- */
+    function generateObject() {
+        let newIndex;
+        // Avoid repeats
+        do {
+            newIndex = Math.floor(Math.random() * objectsList.length);
+        } while (newIndex === lastObjectIndex && objectsList.length > 1);
+
+        lastObjectIndex = newIndex;
+        
+        const display = document.getElementById('object-display');
+        const area = document.getElementById('senses-area');
+        
+        display.textContent = objectsList[newIndex];
+        area.classList.add('active');
+        
+        const inputs = area.querySelectorAll('textarea');
+        inputs.forEach(input => input.value = '');
+    }
+
+    function resetSenses() {
+        const area = document.getElementById('senses-area');
+        const inputs = area.querySelectorAll('textarea');
+        const display = document.getElementById('object-display');
+
+        inputs.forEach(input => input.value = '');
+        display.textContent = '';
+        area.classList.remove('active');
+    }
+
+    function saveSenses() {
+        const objName = document.getElementById('object-display').textContent;
+        if (!objName) return alert('Сначала выберите предмет');
+
+        const inputs = document.querySelectorAll('#senses-area textarea');
+        let content = `Предмет: ${objName}\n\n`;
+
+        inputs.forEach(input => {
+            const senseName = input.getAttribute('data-sense');
+            content += `[${senseName}]\n${input.value}\n\n`;
+        });
+
+        const safeName = sanitizeFilename(objName);
+        downloadTextFile(`${safeName}.txt`, content);
+    }
+
+    /* --- WRITER PRACTICE 3: TECH --- */
+    function generateTechTheme() {
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * techScenarios.length);
+        } while (newIndex === lastTechIndex && techScenarios.length > 1);
+
+        lastTechIndex = newIndex;
+
+        const area = document.getElementById('tech-area');
+        const display = document.getElementById('tech-display');
+        const textarea = area.querySelector('textarea');
+
+        display.textContent = techScenarios[newIndex];
+        area.classList.add('active');
+        
+        textarea.value = '';
+    }
+
+    function saveTech() {
+        const promptText = document.getElementById('tech-display').textContent;
+        const userText = document.getElementById('p3-text').value;
+        
+        if (!promptText) return alert('Сначала сгенерируйте тему');
+
+        // Extract first two words for filename
+        const words = promptText.split(' ').slice(0, 2).join('_');
+        const safeName = sanitizeFilename(words);
+        
+        const content = `Тема: ${promptText}\n\n---\n\n${userText}`;
+        
+        downloadTextFile(`${safeName}.txt`, content);
+    }
+
+    /* --- READER PRACTICE 1: COLLECTOR --- */
+    function saveCollector() {
+        const smell = document.getElementById('col-smell').value;
+        const sound = document.getElementById('col-sound').value;
+        const texture = document.getElementById('col-texture').value;
+        const color = document.getElementById('col-color').value;
+        const emotion = document.getElementById('col-emotion').value;
+
+        if (!smell && !sound && !texture && !color && !emotion) {
+            return alert('Заполните хотя бы одно поле');
+        }
+
+        const content = `Собиратель чувств (${getFormattedDate()})\n\n` +
+                        `Запах: ${smell}\n` +
+                        `Звук: ${sound}\n` +
+                        `Текстура: ${texture}\n` +
+                        `Цвет: ${color}\n` +
+                        `Эмоция: ${emotion}\n`;
+        
+        downloadTextFile(`senses_collection_${getFormattedDate()}.txt`, content);
+    }
+
+    /* --- READER PRACTICE 2: REWRITE --- */
+    function saveRewrite() {
+        const text = document.getElementById('rewrite-text').value;
+        if (!text) return alert('Поле пустое');
+        
+        const content = `Переписывание абзаца (${getFormattedDate()})\n\n${text}`;
+        downloadTextFile(`rewrite_${getFormattedDate()}.txt`, content);
+    }
+
+    /* --- READER PRACTICE 3: ALIVE OBJECT --- */
+    function generateAliveObject() {
+        let newIndex;
+        do {
+            newIndex = Math.floor(Math.random() * aliveObjectsList.length);
+        } while (newIndex === lastAliveIndex && aliveObjectsList.length > 1);
+
+        lastAliveIndex = newIndex;
+
+        const display = document.getElementById('alive-display');
+        const area = document.getElementById('alive-area');
+        const textarea = document.getElementById('alive-text');
+
+        display.textContent = aliveObjectsList[newIndex];
+        area.classList.add('active');
+        textarea.value = '';
+    }
+
+    function saveAliveObject() {
+        const objName = document.getElementById('alive-display').textContent;
+        const text = document.getElementById('alive-text').value;
+
+        if (!objName) return alert('Сначала выберите предмет');
+        
+        const content = `Оживи предмет: ${objName}\n\n${text}`;
+        const safeName = sanitizeFilename(objName);
+        downloadTextFile(`${safeName}_alive.txt`, content);
+    }
+
+    /* --- READER PRACTICE 4: DREAM --- */
+    function saveDream() {
+        const text = document.getElementById('dream-text').value;
+        if (!text) return alert('Поле пустое');
+
+        const content = `Описание сна (${getFormattedDate()})\n\n${text}`;
+        downloadTextFile(`dream_scene_${getFormattedDate()}.txt`, content);
+    }
+</script>
+</body>
+</html>
